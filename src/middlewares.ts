@@ -2,6 +2,7 @@ import path from "path";
 import crypto from "crypto";
 import multer from "multer";
 import mime from "mime-types";
+import { AppError } from "./error";
 
 export const uploadFolder = path.resolve(__dirname, "..", "upload");
 
@@ -15,13 +16,13 @@ export const uploadMiddleware = multer({
   }),
   fileFilter(_, file, callback) {
     const allowMimetypes = ["png", "jpg", "jpeg"];
-    const mimetype = `${mime.extension(file.mimetype)}`
+    const mimetype = `${mime.extension(file.mimetype)}`;
 
     if (!allowMimetypes.includes(mimetype)) {
-      return callback(new Error("Invalid file type"));
+      callback(new AppError("Invalid file type"));
     }
 
-    return callback(null, true);
+    callback(null, true);
   },
   limits: { fileSize: 3 * 1024 * 1024 },
 });
