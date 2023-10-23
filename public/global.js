@@ -1,6 +1,19 @@
 const form = document.querySelector("form");
 const submitButton = document.querySelector("#submit-button");
 const fileInput = document.querySelector("#file-input");
+const selectedImage = document.querySelector("#selected-image");
+
+const showImage = (e) => {
+  const { files } = e.clipboardData;
+  if (!files || !files.length) return;
+
+  fileInput.files = e.clipboardData.files;
+  selectedImage.src = URL.createObjectURL(e.clipboardData.files[0]);
+};
+
+window.addEventListener("paste", showImage);
+
+fileInput.addEventListener("change", showImage);
 
 const addTextToView = (text, error = false) => {
   const textElement = document.querySelector("#text");
